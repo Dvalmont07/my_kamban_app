@@ -16,54 +16,33 @@ import java.util.stream.Collectors;
 public class ColumnRepositoryAdapter implements ColumnRepository {
 
     private final SpringDataColumnRepository springDataColumnRepository;
+    private final PersistenceMapper mapper;
 
-    public ColumnRepositoryAdapter(SpringDataColumnRepository springDataColumnRepository) {
+    public ColumnRepositoryAdapter(SpringDataColumnRepository springDataColumnRepository, PersistenceMapper mapper) {
         this.springDataColumnRepository = springDataColumnRepository;
+        this.mapper = mapper;
     }
 
     @Override
     public Column save(Column column) {
-        ColumnJpaEntity saved = springDataColumnRepository.save(toJpa(column));
-        return toDomain(saved);
+        ColumnJpaEntity saved = springDataColumnRepository.save(mapper.toJpa(column));
+        return mapper.toDomain(saved, null); // Board is handled by the caller or lazy load
     }
 
     @Override
     public Optional<Column> findById(Long id) {
-        return springDataColumnRepository.findById(id).map(this::toDomain);
+        return springDataColumnRepository.findById(id).map(entity -> mapper.toDomain(entity, null));
     }
 
     @Override
     public List<Column> findAllByBoardId(Long boardId) {
         return springDataColumnRepository.findAllByBoardId(boardId).stream()
-                .map(this::toDomain)
+                .map(entity -> mapper.toDomain(entity, null))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteById(Long id) {
         springDataColumnRepository.deleteById(id);
-    }
-
-    // --- Mapping helpers ---
-
-    private ColumnJpaEntity toJpa(Column column) {
-        return ColumnJpaEntity.builder()
-                .id(column.getId())
-                .name(column.getName())
-                .position(column.getPosition())
-                .board(null) // board FK is managed by cascade from BoardRepositoryAdapter
-                .createdAt(column.getCreatedAt())
-                .updatedAt(column.getUpdatedAt())
-                .build();
-    }
-
-    private Column toDomain(ColumnJpaEntity entity) {
-        return Column.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .position(entity.getPosition())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
-                .build();
     }
 }
