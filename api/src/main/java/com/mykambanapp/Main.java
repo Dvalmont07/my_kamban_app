@@ -1,4 +1,4 @@
-package com.exemplo;
+package com.mykambanapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
