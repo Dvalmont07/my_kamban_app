@@ -85,9 +85,32 @@ class TextValidatorTest {
         }
 
         @Test
+        @DisplayName("Should throw exception when text is null in minLength")
+        void shouldThrowExceptionWhenTextIsNullInMinLength() {
+            assertThatThrownBy(() -> TextValidator.validateMinLength(null, 3, "field"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("field must be at least 3 characters");
+        }
+
+        @Test
+        @DisplayName("Should throw exception when text is empty in minLength")
+        void shouldThrowExceptionWhenTextIsEmptyInMinLength() {
+            assertThatThrownBy(() -> TextValidator.validateMinLength("", 3, "field"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("field must be at least 3 characters");
+        }
+
+        @Test
         @DisplayName("Should not throw exception when text is at least min length")
         void shouldNotThrowExceptionWhenTextIsAtLeastMinLength() {
             assertThatCode(() -> TextValidator.validateMinLength("ABC", 3, "field"))
+                .doesNotThrowAnyException();
+        }
+
+        @Test
+        @DisplayName("Should not throw exception when text exceeds min length")
+        void shouldNotThrowExceptionWhenTextExceedsMinLength() {
+            assertThatCode(() -> TextValidator.validateMinLength("Longer text", 3, "field"))
                 .doesNotThrowAnyException();
         }
     }
