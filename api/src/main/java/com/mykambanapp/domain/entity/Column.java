@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.mykambanapp.domain.validation.TextValidator;
+
 /**
  * Domain entity representing a Column inside a Kanban Board.
  * Pure Java object — no framework dependencies.
@@ -34,7 +36,7 @@ public class Column {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     public Column(String name, int position) {
-        validateName(name);
+        TextValidator.validateNotBlank(name, "Column name");
         this.name = name;
         this.position = position;
         this.tasks = new ArrayList<>();
@@ -55,16 +57,8 @@ public class Column {
     // --- Setters ---
 
     public void setName(String name) {
-        validateName(name);
+        TextValidator.validateNotBlank(name, "Column name");
         this.name = name;
         this.updatedAt = LocalDateTime.now();
-    }
-
-    // --- Private helpers ---
-
-    private void validateName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Column name must not be blank");
-        }
     }
 }

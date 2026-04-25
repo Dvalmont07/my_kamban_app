@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import com.mykambanapp.domain.validation.TextValidator;
+
 /**
  * Domain entity representing a Kanban Board.
  * Pure Java object — no framework dependencies.
@@ -33,7 +35,7 @@ public class Board {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     public Board(String name, String description) {
-        validateName(name);
+        TextValidator.validateNotBlank(name, "Board name");
         this.name = name;
         this.description = description;
         this.columns = new ArrayList<>();
@@ -54,16 +56,8 @@ public class Board {
     // --- Setters ---
 
     public void setName(String name) {
-        validateName(name);
+        TextValidator.validateNotBlank(name, "Board name");
         this.name = name;
         this.updatedAt = LocalDateTime.now();
-    }
-
-    // --- Private helpers ---
-
-    private void validateName(String name) {
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Board name must not be blank");
-        }
     }
 }
