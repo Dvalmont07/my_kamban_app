@@ -1,4 +1,4 @@
-# Estágio 1: Build (Mantido para garantir build limpo)
+# Stage 1: Build (Maintained to ensure a clean build)
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 COPY pom.xml .
@@ -9,22 +9,22 @@ COPY api/src api/src
 COPY tests/src tests/src
 RUN mvn clean package -DskipTests
 
-# Estágio 2: Runtime
+# Stage 2: Runtime
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Usuário não-root
+# Non-root user
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
-# Copia o JAR inicial (caso não haja volume montado)
+# Copy initial JAR (in case no volume is mounted)
 COPY --from=build /app/api/target/*.jar /app/app.jar
 
-# Variável para facilitar a troca do caminho do JAR se necessário
+# Variable to facilitate changing the JAR path if necessary
 ENV JAR_PATH=/app/app.jar
 
 EXPOSE 8080
 
-# O script verifica se existe um JAR no volume montado (/app/target) 
-# Se existir, usa ele (para Hot Reload), senão usa o interno.
+# The script checks if a JAR exists in the mounted volume (/app/target)
+# If it exists, use it (for Hot Reload), otherwise use the internal one.
 ENTRYPOINT ["sh", "-c", "if [ -f /app/target/api-1.0-SNAPSHOT.jar ]; then java ${JAVA_OPTS} -jar /app/target/api-1.0-SNAPSHOT.jar; else java ${JAVA_OPTS} -jar /app/app.jar; fi"]

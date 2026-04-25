@@ -21,17 +21,17 @@ services:
     depends_on:
       - db
     environment:
-      # Variáveis do Spring Boot mapeadas para as do .env
+      # Spring Boot variables mapped to those in .env
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME:-myapp_db}
       SPRING_DATASOURCE_USERNAME: ${DB_USER:-admin}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-secret}
-      # Outras variáveis definidas no .env
+      # Other variables defined in .env
       APP_NAME: ${APP_NAME}
       JAVA_OPTS: ${JAVA_OPTS}
     ports:
       - "8080:8080"
     volumes:
-      # Mapeia o JAR compilado para permitir reload sem rebuild da imagem
+      # Maps the compiled JAR to allow reload without image rebuild
       - ./api/target:/app/target
     networks:
       - backend_network

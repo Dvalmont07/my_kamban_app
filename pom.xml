@@ -26,7 +26,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Versões centralizadas (o parent do spring já define muitas, mas mantemos as extras) -->
+        <!-- Centralized versions (Spring parent defines many, but we keep extra ones here) -->
         <assertj.version>3.24.2</assertj.version>
     </properties>
 
