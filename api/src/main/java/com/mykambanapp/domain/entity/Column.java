@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -14,15 +17,21 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Column {
 
     private Long id;
     private String name;
     private int position;
     private Board board;
-    private final List<Task> tasks;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @Builder.Default
+    private List<Task> tasks = new ArrayList<>();
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
+    @Builder.Default
+    private LocalDateTime updatedAt = LocalDateTime.now();
 
     public Column(String name, int position) {
         validateName(name);

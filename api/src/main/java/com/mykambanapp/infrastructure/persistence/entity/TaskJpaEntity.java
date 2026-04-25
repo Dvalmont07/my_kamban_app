@@ -1,7 +1,10 @@
 package com.mykambanapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -14,6 +17,9 @@ import java.time.LocalDateTime;
 @Table(name = "tasks")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskJpaEntity {
 
     @Id
@@ -39,19 +45,7 @@ public class TaskJpaEntity {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    /** Required by JPA. */
-    protected TaskJpaEntity() {}
 
-    public TaskJpaEntity(Long id, String title, String description, int position,
-                         ColumnJpaEntity column, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.position = position;
-        this.column = column;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
 
 }

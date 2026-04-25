@@ -47,20 +47,23 @@ public class ColumnRepositoryAdapter implements ColumnRepository {
     // --- Mapping helpers ---
 
     private ColumnJpaEntity toJpa(Column column) {
-        return new ColumnJpaEntity(
-                column.getId(),
-                column.getName(),
-                column.getPosition(),
-                null, // board FK is managed by cascade from BoardRepositoryAdapter
-                column.getCreatedAt(),
-                column.getUpdatedAt()
-        );
+        return ColumnJpaEntity.builder()
+                .id(column.getId())
+                .name(column.getName())
+                .position(column.getPosition())
+                .board(null) // board FK is managed by cascade from BoardRepositoryAdapter
+                .createdAt(column.getCreatedAt())
+                .updatedAt(column.getUpdatedAt())
+                .build();
     }
 
     private Column toDomain(ColumnJpaEntity entity) {
-        Column column = new Column(entity.getName(), entity.getPosition());
-        column.setId(entity.getId());
-        column.setUpdatedAt(entity.getUpdatedAt());
-        return column;
+        return Column.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .position(entity.getPosition())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 }

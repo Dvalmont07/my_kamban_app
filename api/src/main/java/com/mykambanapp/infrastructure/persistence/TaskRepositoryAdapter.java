@@ -47,21 +47,25 @@ public class TaskRepositoryAdapter implements TaskRepository {
     // --- Mapping helpers ---
 
     private TaskJpaEntity toJpa(Task task) {
-        return new TaskJpaEntity(
-                task.getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getPosition(),
-                null, // column FK is managed by cascade from ColumnRepositoryAdapter
-                task.getCreatedAt(),
-                task.getUpdatedAt()
-        );
+        return TaskJpaEntity.builder()
+                .id(task.getId())
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .position(task.getPosition())
+                .column(null) // column FK is managed by cascade from ColumnRepositoryAdapter
+                .createdAt(task.getCreatedAt())
+                .updatedAt(task.getUpdatedAt())
+                .build();
     }
 
     private Task toDomain(TaskJpaEntity entity) {
-        Task task = new Task(entity.getTitle(), entity.getDescription(), entity.getPosition());
-        task.setId(entity.getId());
-        task.setUpdatedAt(entity.getUpdatedAt());
-        return task;
+        return Task.builder()
+                .id(entity.getId())
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .position(entity.getPosition())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 }

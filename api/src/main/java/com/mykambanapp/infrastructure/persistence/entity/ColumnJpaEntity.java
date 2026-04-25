@@ -1,7 +1,10 @@
 package com.mykambanapp.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,9 @@ import java.util.List;
 @Table(name = "columns")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ColumnJpaEntity {
 
     @Id
@@ -33,6 +39,7 @@ public class ColumnJpaEntity {
     private BoardJpaEntity board;
 
     @OneToMany(mappedBy = "column", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<TaskJpaEntity> tasks = new ArrayList<>();
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -41,18 +48,7 @@ public class ColumnJpaEntity {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    /** Required by JPA. */
-    protected ColumnJpaEntity() {}
 
-    public ColumnJpaEntity(Long id, String name, int position, BoardJpaEntity board,
-                           LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.id = id;
-        this.name = name;
-        this.position = position;
-        this.board = board;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
 
 }

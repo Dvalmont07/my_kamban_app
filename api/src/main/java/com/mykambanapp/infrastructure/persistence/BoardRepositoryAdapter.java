@@ -48,19 +48,22 @@ public class BoardRepositoryAdapter implements BoardRepository {
     // --- Mapping helpers ---
 
     private BoardJpaEntity toJpa(Board board) {
-        return new BoardJpaEntity(
-                board.getId(),
-                board.getName(),
-                board.getDescription(),
-                board.getCreatedAt(),
-                board.getUpdatedAt()
-        );
+        return BoardJpaEntity.builder()
+                .id(board.getId())
+                .name(board.getName())
+                .description(board.getDescription())
+                .createdAt(board.getCreatedAt())
+                .updatedAt(board.getUpdatedAt())
+                .build();
     }
 
     private Board toDomain(BoardJpaEntity entity) {
-        Board board = new Board(entity.getName(), entity.getDescription());
-        board.setId(entity.getId());
-        board.setUpdatedAt(entity.getUpdatedAt());
-        return board;
+        return Board.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .build();
     }
 }
