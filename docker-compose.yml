@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB_NAME:-myapp_db}
+      POSTGRES_USER: ${DB_USER:-admin}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend_network
+
+  api:
+    build: .
+    container_name: java_api
+    restart: on-failure
+    depends_on:
+      - db
+    environment:
+      # Variáveis do Spring Boot mapeadas para as do .env
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${DB_NAME:-myapp_db}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-admin}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-secret}
+      # Outras variáveis definidas no .env
+      APP_NAME: ${APP_NAME}
+      JAVA_OPTS: ${JAVA_OPTS}
+    ports:
+      - "8080:8080"
+    volumes:
+      # Mapeia o JAR compilado para permitir reload sem rebuild da imagem
+      - ./api/target:/app/target
+    networks:
+      - backend_network
+      - frontend_network
+
+networks:
+  backend_network:
+    driver: bridge
+  frontend_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
