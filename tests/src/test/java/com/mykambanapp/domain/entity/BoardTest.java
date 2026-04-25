@@ -1,11 +1,9 @@
 package com.mykambanapp.domain.entity;
 
-import com.mykambanapp.domain.entity.Board;
-import com.mykambanapp.domain.entity.Column;
-import org.junit.jupiter.api.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import org.junit.jupiter.api.Test;
 
 class BoardTest {
 

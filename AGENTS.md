@@ -5,6 +5,7 @@
 - Always code with TDD (Test-Driven Development) in first place
 - The project must always be done in English (code, comments, commit messages, explanations, documentation)
 - Always plan ahead before creating code or making changes
+- Always remove unused imports
 
 ## Tech Stack
 
